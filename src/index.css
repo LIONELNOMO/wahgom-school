@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --color-ink: #102a43;
+  --color-brand: #0b3155;
+  --color-brand-deep: #071f38;
+  --color-brand-soft: #e9f1f6;
+  --color-gold: #d9ad4d;
+  --color-gold-soft: #f9f1de;
+  --color-cyan: #0f8f99;
+  --color-mist: #f3f6f8;
+  --color-line: #dce5eb;
+}
+
+:root {
+  color: #142536;
+  background: #f3f6f8;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { min-width: 320px; min-height: 100vh; margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-line bg-white shadow-[0_8px_30px_rgba(11,49,85,0.06)];
+  }
+  .field-label {
+    @apply mb-1.5 block text-[11px] font-bold tracking-wide text-slate-600;
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-cyan focus:ring-3 focus:ring-cyan/10;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-brand/15 transition hover:-translate-y-0.5 hover:bg-[#12476f] focus:outline-none focus:ring-3 focus:ring-brand/20 disabled:hover:translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 text-xs font-bold text-brand transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-3 focus:ring-brand/10;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 transition hover:bg-red-100;
+  }
+  .icon-button {
+    @apply inline-grid size-9 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-brand focus:outline-none focus:ring-3 focus:ring-brand/10;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold;
+  }
+  .table-head {
+    @apply bg-slate-50 text-left text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500;
+  }
+  .page-title {
+    @apply font-display text-3xl font-semibold tracking-tight text-brand sm:text-4xl;
+  }
+  .section-kicker {
+    @apply text-[10px] font-extrabold uppercase tracking-[0.2em] text-cyan;
+  }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes intro-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.intro-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  overflow: hidden;
+  background: #0a1f4d;
+  opacity: 1;
+  transition: opacity .42s ease, transform .42s ease;
+}
+
+.intro-splash--closing {
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1.015);
+}
+
+.intro-skip {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.5rem;
+  padding: .65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, .78);
+  background: rgba(7, 31, 56, .55);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .16);
+  backdrop-filter: blur(12px);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  transition: color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: white;
+  background: rgba(255, 255, 255, .14);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.intro-progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .08);
+}
+
+.intro-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, #c99632, #f5d27a);
+  animation: intro-progress 14s linear both;
+}
+
+.page-enter { animation: page-in .3s ease-out both; }
+.modal-enter { animation: modal-in .22s ease-out both; }
+.toast-enter { animation: toast-in .22s ease-out both; }
+
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: #b8c7d1 transparent; }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { border-radius: 8px; background: #b8c7d1; }
+
+/* Bulletin officiel A4 */
+.bulletin-page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  margin: 0 auto;
+  padding: 11mm 12mm 13mm;
+  overflow: hidden;
+  box-sizing: border-box;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  color: #111827;
+  background: white;
+  box-shadow: 0 18px 45px rgba(11, 49, 85, .18);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9.3px;
+}
+
+.bulletin-content {
+  width: 100%;
+  will-change: transform;
+}
+
+.bulletin-preview-wrap,
+.bulletin-preview-transform {
+  transition: width .2s ease, height .2s ease, transform .2s ease;
+}
+
+.bulletin-page .watermark {
+  position: absolute;
+  z-index: 0;
+  top: 37%;
+  left: 50%;
+  width: 108mm;
+  height: 108mm;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: .055;
+  filter: grayscale(20%);
+}
+
+.bulletin-page > *:not(.watermark) { position: relative; z-index: 1; }
+.bulletin-table { width: 100%; border-collapse: collapse; }
+.bulletin-table th, .bulletin-table td { border: 1px solid #263746; padding: 1.65mm 1.2mm; }
+.bulletin-table th { background: #eaf0f3; text-align: center; font-size: 8px; text-transform: uppercase; }
+.bulletin-table .group-row td { background: #dbe6eb; font-weight: 800; text-transform: uppercase; }
+
+.teachers-print-sheet { display: none; }
+.bulletin-batch-sheet { display: none; }
+.marks-print-sheet { display: none; }
+
+/* Barre de navigation du bas, façon application mobile. */
+.mobile-tabbar {
+  box-shadow: 0 -6px 20px -12px rgb(15 23 42 / .35);
+}
+
+@media (max-width: 850px) {
+  .bulletin-stage { margin-inline: -1rem; border-radius: 0; }
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  .mobile-tabbar { display: none !important; }
+  /* La fiche de notes d’une classe s’imprime en paysage. */
+  @page marks-landscape { size: A4 landscape; margin: 0; }
+  body:has(#printable-marks-sheet) { page: marks-landscape; }
+  html, body, #root { width: 210mm; min-height: 297mm; background: white !important; }
+  body * { visibility: hidden !important; }
+  .bulletin-preview-wrap,
+  .bulletin-preview-transform {
+    position: static !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    transform: none !important;
+  }
+  #printable-bulletin, #printable-bulletin *,
+  #printable-batch, #printable-batch *,
+  #printable-marks-sheet, #printable-marks-sheet *,
+  #printable-teachers-list, #printable-teachers-list * { visibility: visible !important; }
+  /* Fiche de notes d’une classe : paysage, une colonne par matière. */
+  body:has(#printable-marks-sheet) #printable-bulletin { display: none !important; }
+  #printable-marks-sheet {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    display: block !important;
+    width: 100% !important;
+    padding: 8mm 7mm !important;
+    margin: 0 !important;
+    color: #0b1b2b;
+  }
+  #printable-marks-sheet header { display: flex; align-items: center; gap: 4mm; margin-bottom: 4mm; border-bottom: 1.5px solid #173b5d; padding-bottom: 2.5mm; }
+  #printable-marks-sheet header img { width: 17mm; height: 17mm; object-fit: contain; }
+  #printable-marks-sheet h1 { margin: 0; font-size: 15px; color: #0b3155; text-transform: uppercase; }
+  #printable-marks-sheet header p { margin: 0.6mm 0 0; font-size: 8px; }
+  #printable-marks-sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  #printable-marks-sheet th, #printable-marks-sheet td {
+    border: 0.5px solid #64748b;
+    padding: 0.8mm 0.4mm;
+    text-align: center;
+    font-size: 7px;
+    overflow: hidden;
+  }
+  #printable-marks-sheet thead th { background: #e9f1f6 !important; color: #0b3155 !important; font-weight: 700; vertical-align: bottom; }
+  /* Les intitulés de matières tiennent à la verticale. */
+  #printable-marks-sheet .col-subject span {
+    display: block;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    margin: 0 auto;
+    max-height: 26mm;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #printable-marks-sheet .col-rank { width: 7mm; }
+  #printable-marks-sheet .col-name { width: 46mm; text-align: left; font-size: 7.5px; }
+  #printable-marks-sheet .col-total { width: 11mm; }
+  #printable-marks-sheet .coefficient-row th { background: #f3f7fa !important; font-size: 6.5px; font-style: italic; }
+  #printable-marks-sheet tbody tr:nth-child(even) td { background: #f8fafc !important; }
+  #printable-marks-sheet td.below { color: #b91c1c !important; font-weight: 700; }
+  #printable-marks-sheet tfoot td { background: #e9f1f6 !important; font-weight: 700; font-size: 7.5px; }
+  #printable-marks-sheet tfoot .col-name { text-align: right; padding-right: 2mm; }
+  #printable-marks-sheet thead { display: table-header-group; }
+  #printable-marks-sheet tr { break-inside: avoid; page-break-inside: avoid; }
+  #printable-marks-sheet footer { margin-top: 3mm; text-align: right; font-size: 7px; color: #64748b; }
+  /* Pendant l’impression d’un lot, l’aperçu unitaire ne doit pas se superposer. */
+  body:has(#printable-batch) #printable-bulletin { display: none !important; }
+  /* Impression d’une classe entière : une page A4 par bulletin. */
+  #printable-batch {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+  }
+  #printable-batch .bulletin-page {
+    position: relative !important;
+    width: 210mm !important;
+    height: 296.8mm !important;
+    min-height: 296.8mm !important;
+    max-height: 296.8mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+  #printable-batch .bulletin-page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+  #printable-bulletin {
+    position: fixed !important;
+    inset: 0 auto auto 0 !important;
+    width: 210mm !important;
+    height: 296.8mm !important;
+    min-height: 296.8mm !important;
+    max-height: 296.8mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    break-after: avoid-page !important;
+    page-break-after: avoid !important;
+  }
+  #printable-teachers-list {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: 12mm !important;
+    color: #172b3d !important;
+    background: white !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 8px !important;
+  }
+  #printable-teachers-list header { display: flex; align-items: center; gap: 4mm; margin-bottom: 5mm; border-bottom: 1px solid #173b5d; padding-bottom: 3mm; }
+  #printable-teachers-list header img { width: 15mm; height: 15mm; object-fit: contain; }
+  #printable-teachers-list h1 { margin: 0; font-size: 16px; color: #0b3155; }
+  #printable-teachers-list p { margin: 1mm 0 0; font-size: 9px; }
+  #printable-teachers-list table { width: 100%; border-collapse: collapse; }
+  #printable-teachers-list th, #printable-teachers-list td { border: 1px solid #9aa9b5; padding: 1.4mm; vertical-align: top; }
+  #printable-teachers-list th { background: #e9f1f6 !important; color: #0b3155 !important; text-transform: uppercase; }
+  #printable-teachers-list footer { margin-top: 4mm; text-align: right; font-size: 8px; color: #64748b; }
+}
+
+@media (display-mode: standalone) {
+  html, body { overscroll-behavior-y: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

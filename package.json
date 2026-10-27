@@ -1,0 +1,25 @@
+{
+  "name": "wamghomschool-notes",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-local.mjs",
+    "seed": "node backend/scripts/generate-seed.mjs",
+    "intro": "node scripts/prepare-intro.mjs",
+    "build": "npm run seed && npm run intro && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "package:hostinger": "npm run build && node scripts/package-hostinger.mjs"
+  },
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest",
+    "react-icons": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "latest",
+    "@vitejs/plugin-react": "latest",
+    "tailwindcss": "latest",
+    "vite": "latest"
+  }
+}

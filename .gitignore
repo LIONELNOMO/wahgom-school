@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+backend/config/config.local.php
+backend/database/teacher-credentials.local.json
+docs/identifiants_enseignants.confidentiel.md
+release/
+
+# Paquets de déploiement générés
+*.zip
+cbolive-hostinger/

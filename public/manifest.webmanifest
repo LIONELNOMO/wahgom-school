@@ -1,0 +1,35 @@
+{
+  "id": "/",
+  "name": "WamghomSchool — Gestion des notes",
+  "short_name": "Wamghom",
+  "description": "Gestion hors ligne et synchronisée des élèves, des notes et des bulletins scolaires.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#F3F6F8",
+  "theme_color": "#0B3155",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
