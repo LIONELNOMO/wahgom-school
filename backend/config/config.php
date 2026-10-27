@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+// Valeurs par défaut du développement local. Ce fichier est suivi par Git :
+// n’y écrivez jamais un mot de passe réel. Les réglages de production vont
+// dans config.local.php, qui est ignoré par Git et écrase ces valeurs.
 return [
     'app' => [
         'env' => getenv('WAMGHOM_ENV') ?: 'local',
